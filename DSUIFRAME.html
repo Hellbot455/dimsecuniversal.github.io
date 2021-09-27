@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="REMOTE ACCESS TERMINAL TO DSU DATABASE">
+    <meta name="author" content="Succulent_Goulash">
+    <title>DSU | DATABASE TERMINAL</title>
+    <link rel="icon" href="./img/logo.png">
+    <link rel="stylesheet" href="./css/style.css" >
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200&display=swap" rel="stylesheet">
+    <div style="font-family: mechsuit;"></div>
+  </head>
+  <body id="imagamorphia" onresize="resize_canvas()">
+    <div id="theater">
+      <video id="video" src="./vid/loadingupanimation.mp4" hidden></video>
+    </div>
+
+    <img hidden id="LOGOWHITE" src="./img/OohYea.png" width="24000" height="600">
+    <iframe id="IFRAMEInternal" title="This Is Fucking Pain" width="100%" height="85%" frameBorder= "0" allow="autoplay" style="position:fixed; top:15%" src=''></iframe>
+    <canvas id="canvasmain"></canvas>
+    <script type="text/javascript" src="./js/loginanimations.js"></script>
+    <script src="./js/GUILoad.js" charset="utf-8"></script>
+    <script src="./js/Fade.js" charset="utf-8"></script>
+    <script src="./js/soundmanager2.js"></script>
+    <script src="./js/jqueryjs.js"></script>
+    <script>
+    // Preparation of start
+    soundManager.onready(function() {
+
+      // Preparation of sounds
+      var keyboardsfx = soundManager.createSound({
+        id: 'keyboardclack',
+        url: './sounds/keyboardsfx.wav',
+        autoLoad: true,
+        autoPlay: false
+      })
+      var loginaccept = soundManager.createSound({
+        id: 'loginaccept',
+        url: './sounds/loginaccept.wav',
+        autoLoad: true,
+        autoPlay: false
+      });
+      var loadingsfx = soundManager.createSound({
+        id: 'loadingsfx',
+        url: './sounds/loadingsfx.wav',
+        autoLoad: true,
+        autoPlay: false
+      });
+      var signinclick = soundManager.createSound({
+        id: 'signinclick',
+        url: './sounds/signinclick.wav',
+        autoload: true,
+        autplay: false
+      });
+
+      //Other Preparation
+      var GUIWebPageAccess = ['https://cdn.discordapp.com/attachments/814242195636092948/892074325048455208/Screenshot_20210927-114350_Facebook.jpg','','','','']; //Currently filled with other webpages for testing purposes
+      var DrawnAnimation = 0;
+      var ctx = canvas.getContext('2d');
+      var IFI = document.getElementById("IFRAMEInternal");
+      var IFIModeStatus = false;
+
+      function hideIFRAME() {
+	      $(IFI).hide();
+      }
+      function showIFRAME() {
+	      $(IFI).show();
+      }
+
+      function TotalAnimationOperation() {
+        UserLogoLoaded = false;
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        DrawnAnimation = 1;
+        LoginBlockMove()
+        setTimeout(LoginUserBox, 600);
+        setTimeout(LoginPassBox, 600);
+        setTimeout(LoginWhiteLogo, 550);
+        setTimeout(LoginLogoTextFunc, 550);
+        setTimeout(LoginAcceptButtonFunc, 560);
+        setTimeout(LoginButtonTextFunc, 560);
+        setTimeout(function () {
+          soundManager.play('keyboardclack');
+        },1250);
+        setTimeout(LoginUsernameTextFunc, 1250);
+        setTimeout(LoginPasswordTextFunc, 2050);
+        setTimeout(LoginFlashButtonFunc, 2750);
+        setTimeout(function () {
+          DrawnAnimation = 2;
+        }, 2000);
+        setTimeout(LoginBackgroundFunc, 2000);
+        setTimeout(function () {
+          soundManager.play('loginaccept');
+        },2900)
+        setTimeout(LoadingUpAnimationFunc, 3700);
+        setTimeout(function () {
+          soundManager.play('loadingsfx');
+        },9400)
+      }
+      function LoadingUpAnimationFunc() {
+        var video = document.getElementById('video');
+        video.play()
+
+        video.addEventListener('play', function() {
+          var $this = this; //cache
+          (function loop() {
+            if (!$this.ended) {
+
+              if ((1080/1920)*canvas.width <= canvas.height) {
+                var LoadingUpAnimation_height = (1080/1920)*canvas.width;
+                var LoadingUpAnimation_width = canvas.width;
+
+              } else {
+                if ((1920/1080)*0.08*canvas.height <= canvas.width) {
+                  var LoadingUpAnimation_height = canvas.height;
+                  var LoadingUpAnimation_width = (1920/1080)*canvas.height;
+                }
+              }
+
+              LoadingUpAnimation.clearRect(0,0,canvas.width,canvas.height)
+              LoadingUpAnimation.drawImage($this, (canvas.width-LoadingUpAnimation_width)/2, (canvas.height-LoadingUpAnimation_height)/2  , LoadingUpAnimation_width, LoadingUpAnimation_height);
+              requestAnimationFrame(loop);
+            } else {
+              if ($this.ended) {
+                LoadingUpAnimation.clearRect(0,0,canvas.width,canvas.height)
+                setTimeout(function () {
+                  GUIInitialAnimation();
+                },100);
+              }
+            }
+
+          })();
+        }, 0);
+      }
+
+      function LoadWebpageFunc(CycleNumberWebpage) {
+        IFI.src = GUIWebPageAccess[CycleNumberWebpage];
+      }
+
+      var IFRAMECONTROLStat = false;
+
+      canvas.onclick = function(e) { // Only For Chrome
+        if (UserLogoLoaded) {
+          // important: correct mouse position:
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top,
+              i = 0, r;
+            // add a single rect to path:
+            UserLogo.beginPath();
+            UserLogo.rect(canvas.width*0.5-(UserLogoWidth/2),canvas.height*UserLogo_YPOS-(UserLogoHeight/2),UserLogoWidth,UserLogoHeight);
+
+            // check if we hover it, fill red, if not fill it blue
+            //UserLogo.fillStyle = UserLogo.isPointInPath(x, y) ? "red" : "blue";
+            //UserLogo.fill()
+            if (UserLogo.isPointInPath(x,y)) {
+              UserLogoLoaded = false;
+              UserLogo.clearRect(0,0,canvas.width,canvas.height);
+              soundManager.play('signinclick');
+              setTimeout( function () {
+                TotalAnimationOperation();
+              },100);
+            }
+        }
+        if (GUIImageLoadAnimStatus) {
+          ReEvalRects();
+          // important: correct mouse position:
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top, r;
+
+          for (let i2 = 0; i2 <= 4; i2++) {
+            r = rects[i2];
+
+            // add a single rect to path:
+            GUILoadContext.beginPath();
+            GUILoadContext.rect(r.x,r.y,r.w,r.h);
+
+            if (GUILoadContext.isPointInPath(x,y)) {
+              GUIModeStatus = false;
+              GUIImageLoadAnimStatus = false;
+              LoadWebpageFunc(i2);
+              FadeFunc();
+              GUIOnClickBlowUp(i2);
+              setTimeout( function () {
+                GUILoadContext.clearRect(0,0,canvas.width,canvas.height);
+                //ctx.canvas.width  = window.innerWidth;
+                canvas.height = window.innerHeight*0.15;
+                IFRAMECONTROLStat = true;
+                showIFRAME();
+                IFIBackButtonDrawFunc();
+                IFIHomeButtonDrawFunc();
+                IFIModeStatus = true;
+              },1200);
+            }
+          }
+        }
+
+        if (IFIModeStatus) {
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top,
+              i = 0, r;
+
+          IFIBackButtonDrawFunc();
+          IFIHomeButtonDrawFunc();
+          GUILoadContext.beginPath();
+          ctx.rect(canvas.width*0.85-((522/515)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(522/515)*canvas.height*0.7,canvas.height*0.7);
+
+          if (ctx.isPointInPath(x,y)) {
+            IFIBackButtonDrawFunc(0.9);
+          }
+
+          GUILoadContext.beginPath();
+          ctx.rect(canvas.width*0.15-((1612/2000)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(1612/2000)*canvas.height*0.7,canvas.height*0.7);
+
+          if (ctx.isPointInPath(x,y)) {
+            IFIHomeButtonDrawFunc(0.9);
+            IFIModeStatus = false;
+            ctx.clearRect(0,0,canvas.width,canvas.height)
+            canvas.height = window.innerHeight;
+            FadeFunc();
+            var GUIImageYLoop = [1.5 , 1.5 , 1.5 , 1.5 , 1.5];
+            Fade_Data.current = 0;
+            i1 = 1;
+            var GUIImageScale = 0.75;
+            var GUIImageYLoopSpeed = 0.01;
+            setTimeout( function () {
+              hideIFRAME();
+              GUIModeStatus = true;
+              GUIImageLoadAnimStatus = true;
+            },1000);
+            setTimeout( function () {
+              GUIInitialAnimation();
+            },1200);
+          }
+        }
+      }
+
+
+
+
+      canvas.onmousemove = function(e) {
+        if (UserLogoLoaded) { // For Startup
+          // important: correct mouse position:
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top,
+              i = 0, r;
+            // add a single rect to path:
+            UserLogo.beginPath();
+            UserLogo.rect(canvas.width*0.5-(UserLogoWidth/2),canvas.height*UserLogo_YPOS-(UserLogoHeight/2),UserLogoWidth,UserLogoHeight);
+            if (UserLogo.isPointInPath(x,y)) {
+              if (UserLogoLoaded) {
+                UserLogoGrow();
+              }
+            } else {
+              if (UserLogoLoaded) {
+                UserLogoShrink();
+              }
+            }
+        }
+
+        if (GUIImageLoadAnimStatus && GUIModeStatus) { // GUI MODE
+          ReEvalRects();
+          // important: correct mouse position:
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top, r;
+
+          for (let i2 = 0; i2 <= 4; i2++) {
+            r = rects[i2];
+
+            // add a single rect to path:
+            GUILoadContext.beginPath();
+            GUILoadContext.rect(r.x,r.y,r.w,r.h);
+
+            //console.log(GUILoadContext.isPointInPath(x,y));
+            if (GUIImageLoadAnimStatus && GUILoadContext.isPointInPath(x,y) == false) {
+              GUIImageScale = 0.75;
+              GUILoadContext.clearRect(canvas.width*((i2+1)/6)-(canvas.width/12),0,canvas.width/6,canvas.height);
+              GUILoadContext.drawImage(GUIImageLoc[i2],canvas.width*((i2+1)/6)-((canvas.width/6)*GUIImageScale/2),canvas.height*0.5-((1400/1000)*(canvas.width/6)*GUIImageScale/2),(canvas.width/6)*GUIImageScale,(1400/1000)*(canvas.width/6)*GUIImageScale);
+            }
+
+            if (GUIImageLoadAnimStatus && GUILoadContext.isPointInPath(x,y)) {
+              GUIImageScale = 0.85;
+              GUILoadContext.clearRect(canvas.width*((i2+1)/6)-(canvas.width/12),0,canvas.width/6,canvas.height);
+              GUILoadContext.drawImage(GUIImageLoc[i2],canvas.width*((i2+1)/6)-((canvas.width/6)*GUIImageScale/2),canvas.height*0.5-((1400/1000)*(canvas.width/6)*GUIImageScale/2),(canvas.width/6)*GUIImageScale,(1400/1000)*(canvas.width/6)*GUIImageScale);
+            }
+          }
+        }
+
+        if (IFIModeStatus) {
+          var rect = this.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top,
+              i = 0, r;
+
+          IFIBackButtonDrawFunc();
+          IFIHomeButtonDrawFunc();
+          GUILoadContext.beginPath();
+          ctx.rect(canvas.width*0.85-((522/515)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(522/515)*canvas.height*0.7,canvas.height*0.7);
+
+          if (ctx.isPointInPath(x,y)) {
+            IFIBackButtonDrawFunc(0.8);
+          }
+
+          GUILoadContext.beginPath();
+          ctx.rect(canvas.width*0.15-((1612/2000)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(1612/2000)*canvas.height*0.7,canvas.height*0.7);
+
+          if (ctx.isPointInPath(x,y)) {
+            IFIHomeButtonDrawFunc(0.8);
+          }
+        }
+      };
+
+
+      function GUIOnClickBlowUp(IterationVal) {
+        if (GUIImageScale < 1 && !IFRAMECONTROLStat) {
+          setTimeout(function () {
+            GUIImageScale +=0.01;
+            GUILoadContext.clearRect(canvas.width*((IterationVal+1)/6)-(canvas.width/12),0,canvas.width/6,canvas.height);
+            GUILoadContext.drawImage(GUIImageLoc[IterationVal],canvas.width*((IterationVal+1)/6)-((canvas.width/6)*GUIImageScale/2),canvas.height*0.5-((1400/1000)*(canvas.width/6)*GUIImageScale/2),(canvas.width/6)*GUIImageScale,(1400/1000)*(canvas.width/6)*GUIImageScale);
+            GUIOnClickBlowUp(IterationVal);
+          },10);
+        }
+      }
+
+      window.onresize = resize_canvas;
+      function GUIInitialAnimation(){
+        GUIDrawVersion();
+        GUIImageLoadAnimFunc();
+      }
+
+      function resize_canvas() {
+        canvas.width  = window.innerWidth;
+        if (!IFRAMECONTROLStat) {
+          canvas.height = window.innerHeight;
+        } else if (IFRAMECONTROLStat) {
+          canvas.height = window.innerHeight*0.15;
+        }
+
+        if (GUIModeStatus) {
+          if(GUIImageLoadAnimStatus) {
+            GUIIconRefresh();
+          } else if (!GUIImageLoadAnimStatus) {
+            for (let i4 = 0; i4 <= 4; i4++) {
+              r = rects[i4];
+                GUILoadContext.clearRect(canvas.width*((i4+1)/6)-(canvas.width/12),0,canvas.width/6,canvas.height);
+                GUILoadContext.drawImage(GUIImageLoc[i4],canvas.width*((i4+1)/6)-((canvas.width/6)*GUIImageScale/2),canvas.height*GUIImageYLoop[i4]-((1400/1000)*(canvas.width/6)*GUIImageScale/2),(canvas.width/6)*GUIImageScale,(1400/1000)*(canvas.width/6)*GUIImageScale);
+            }
+          }
+        }
+        if (IFIModeStatus) {
+            IFIBackButtonDrawFunc();
+            IFIHomeButtonDrawFunc();
+          }
+        }
+
+      var IFIHomeButtonIMG = new Image();
+      IFIHomeButtonIMG.src = './img/GUI/Home.png';
+
+      function IFIHomeButtonDrawFunc(IFIHomeScalingParam) {
+        if (!IFIHomeScalingParam) {
+          var IFIHomeButtonScale = 0.7;
+        }
+        else {
+          var IFIHomeButtonScale = IFIHomeScalingParam;
+        }
+        ctx.clearRect(0,0,canvas.width/2, canvas.height);
+        ctx.drawImage(IFIHomeButtonIMG,canvas.width*0.15-((522/515)*canvas.height*IFIHomeButtonScale)/2, canvas.height*0.5-(canvas.height*IFIHomeButtonScale/2),(1612/2000)*canvas.height*IFIHomeButtonScale,canvas.height*IFIHomeButtonScale);
+      }
+
+      var IFIBackButtonIMG = new Image();
+      IFIBackButtonIMG.src = './img/GUI/Back.png';
+
+      function IFIBackButtonDrawFunc(IFIBackScalingParam) {
+        if (!IFIBackScalingParam) {
+          var IFIBackButtonScale = 0.7;
+        }
+        else {
+          var IFIBackButtonScale = IFIBackScalingParam;
+        }
+        ctx.clearRect(canvas.width/2,0,canvas.width/2, canvas.height);
+        ctx.drawImage(IFIBackButtonIMG,canvas.width*0.85-((522/515)*canvas.height*IFIBackButtonScale)/2, canvas.height*0.5-(canvas.height*IFIBackButtonScale/2),(522/515)*canvas.height*IFIBackButtonScale,canvas.height*IFIBackButtonScale);
+      }
+
+      // Running the actual animations
+      hideIFRAME();
+      LoginBackgroundFunc();
+      setTimeout( function () {
+        UserLogoMoveFunc();
+      }, initialdelay);
+
+    });
+    </script>
+
+
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="REMOTE ACCESS TERMINAL TO DSU DATABASE">
+    <meta name="author" content="Succulent_Goulash">
+    <title>DSU | DATABASE TERMINAL</title>
+    <link rel="icon" href="./img/logo.png">
+    <style type="text/css">
+            body, html
+            {
+                margin: 0; padding: 0; height: 100%; overflow: hidden;
+                background-color: black;
+            }
+        </style>
+  </head>
+  <body onresize="resize_canvas()">
+    <canvas id="canvasmain"></canvas>
+    <script src="./js/GUILoad.js" charset="utf-8"></script>
+    <script src="./js/Fade.js" charset="utf-8"></script>
+    <script>
+    //ResizeFunc
+    function resize_canvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      if (GUIModeStatus) {
+        if(GUIImageLoadAnimStatus) {
+          GUIIconRefresh();
+        } else if (!GUIImageLoadAnimStatus) {
+          for (let i4 = 0; i4 <= 4; i4++) {
+            r = rects[i4];
+              GUILoadContext.clearRect(canvas.width*((i4+1)/6)-(canvas.width/12),0,canvas.width/6,canvas.height);
+              GUILoadContext.drawImage(GUIImageLoc[i4],canvas.width*((i4+1)/6)-((canvas.width/6)*GUIImageScale/2),canvas.height*GUIImageYLoop[i4]-((1400/1000)*(canvas.width/6)*GUIImageScale/2),(canvas.width/6)*GUIImageScale,(1400/1000)*(canvas.width/6)*GUIImageScale);
+          }
+        }
+      }
+    }
+    // Everything else
+
+      setTimeout( function () {
+        
+      },200);
+    </script>
+  </body>
