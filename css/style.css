@@ -32,3 +32,11 @@ body {
 iframe {
     border: 0px solid black;
 }
+
+.section {
+  max-height: 250px;
+  padding: 1rem;
+  overflow-y: auto;
+  direction: ltr;
+  scrollbar-color: #d4aa70 #e4e4e4;
+  scrollbar-width: thin;
