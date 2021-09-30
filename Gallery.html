@@ -13,11 +13,86 @@
     <!--
     <div style="font-family: mechsuit;"></div>
   -->
-  </head>
-  <body id="birbus1">
-    <script src="./js/jqueryjs.js"></script>
-    <div class="section">
+  <!--Scroll Wheel Styling-->
+  <style>
+    .section {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+    }
 
-    </div>
+    .head {
+      font: "courier new";
+    }
+
+    body {
+      background-color: #000000;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      outline-style:double;
+      outline-color: #ffffff;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #fff;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /*Gallery CSS from W3*/
+        div.gallery {
+      margin: 10px;
+      border: 3px solid #777;
+      float: left;
+      width: 180px;
+      padding: 5px;
+    }
+
+    div.gallery:hover {
+      border: 3px solid #FFFFFF;
+      width: 180px;
+      margin: 10px;
+    }
+
+    div.gallery img {
+      width: 100%;
+      height: auto;
+    }
+
+    div.desc {
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+  </head>
+  <body class="section">
+    <script src="./js/jqueryjs.js"></script>
+    <script>
+    //var sectiondiv = document.getElementById("divsec");
+    for (let i = 0; i < 200; i++) {
+      var div = document.createElement('div');
+      div.innerHTML = "<a target='_blank' href='"+"https://media.discordapp.net/attachments/767549445373427733/769752169968566352/Pandy-2.png"+"'><img src='"+"https://media.discordapp.net/attachments/767549445373427733/769752169968566352/Pandy-2.png"+"' width='400' height='400'></a></div>";
+      // better to use CSS though - just set class
+      div.setAttribute('class', 'gallery'); // and make sure myclass has some styles in css
+      document.body.appendChild(div);
+    }
+    </script>
+
   </body>
 </html>
