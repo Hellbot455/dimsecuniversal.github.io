@@ -212,14 +212,12 @@
           ctx.rect(canvas.width*0.85-((522/515)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(522/515)*canvas.height*0.7,canvas.height*0.7);
 
           if (ctx.isPointInPath(x,y)) {
-            IFIBackButtonDrawFunc(0.9);
           }
 
           GUILoadContext.beginPath();
           ctx.rect(canvas.width*0.15-((1612/2000)*canvas.height*0.7)/2, canvas.height*0.5-(canvas.height*0.7/2),(1612/2000)*canvas.height*0.7,canvas.height*0.7);
 
           if (ctx.isPointInPath(x,y)) {
-            IFIHomeButtonDrawFunc(0.9);
             var IFITitleElm = document.getElementById("IFISecTitle");
             IFITitleElm.parentNode.removeChild(IFITitleElm);
             IFIModeStatus = false;

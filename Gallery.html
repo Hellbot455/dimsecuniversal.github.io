@@ -58,16 +58,19 @@
     /*Gallery CSS from W3*/
         div.gallery {
       margin: 10px;
-      border: 3px solid #777;
+      border: 3px dashed #999;
       float: left;
       width: 180px;
       padding: 5px;
+      background-color: #666;
     }
 
     div.gallery:hover {
       border: 3px solid #FFFFFF;
+      background-color: #999;
       width: 180px;
       margin: 10px;
+      cursor: pointer;
     }
 
     div.gallery img {
@@ -79,18 +82,80 @@
       padding: 15px;
       text-align: center;
     }
+
+    #overlay {
+      position: fixed; /* Sit on top of the page content */
+      display: none; /* Hidden by default */
+      width: 100%; /* Full width (cover the whole page) */
+      height: 100%; /* Full height (cover the whole page) */
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.3); /* Black background */
+      z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    }
+    #imgcentering{
+      position: fixed;
+      right: 3%;
+      top: 3%;
+      padding: 1%;
+      object-fit: contain;
+      background-color: rgba(0,0,0,0.7); /* Black background */
+      border: 3px solid #FFFFFF;
+      z-index: 3;
+      border-radius: 0;
+    }
+    #exitbutton{
+      position: fixed;
+      right: 5%;
+      top: 5%;
+      z-index: 4;
+      border: 2px solid #FFFFFF;
+      object-fit: contain;
+      cursor: pointer;
+      border-radius: 10%;
+    }
   </style>
   </head>
   <body class="section">
     <script src="./js/jqueryjs.js"></script>
     <script>
-    //var sectiondiv = document.getElementById("divsec");
+
+
+    function OverlayOn() {
+      var div = document.createElement('div');
+      div.innerHTML = "<img id='imgcentering' src='"+"./img/Gall/PandyTest.png"+"' width='90%' height='90%'><img id='exitbutton' src='"+"./img/GUI/GenericExitButton.png"+"' width='5%  ' height='5%' onclick='OverlayOff()'></div>";
+      // better to use CSS though - just set class
+      div.setAttribute('id', 'overlay');
+      document.body.appendChild(div);
+      document.getElementById("overlay").style.display = "block";
+      $('body').css({'overflow':'hidden'});
+       $(document).bind('scroll',function () {
+            window.scrollTo(0,0);
+       });
+    }
+
+    function OverlayOff() {
+      document.getElementById("overlay").style.display = "none";
+      $(document).unbind('scroll');
+      $('body').css({'overflow':'visible'});
+    }
+
     for (let i = 0; i < 200; i++) {
       var div = document.createElement('div');
-      div.innerHTML = "<a target='_blank' href='"+"https://media.discordapp.net/attachments/767549445373427733/769752169968566352/Pandy-2.png"+"'><img src='"+"https://media.discordapp.net/attachments/767549445373427733/769752169968566352/Pandy-2.png"+"' width='400' height='400'></a></div>";
+      div.innerHTML = "<img src='"+"./img/Gall/PandyTest.png"+"' width='400' height='400'></div>";
       // better to use CSS though - just set class
-      div.setAttribute('class', 'gallery'); // and make sure myclass has some styles in css
+      div.setAttribute('class', 'gallery');
+      div.setAttribute('id', 'gallery');
+      div.setAttribute('onclick', 'OverlayOn()'); // and make sure myclass has some styles in css
       document.body.appendChild(div);
+    }
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+      $('.gallery').css('width', '42%')
+      $('.gallery').css('margin', '1%')
+    } else {
+      $('.gallery').css('width', '180px')
     }
     </script>
 
